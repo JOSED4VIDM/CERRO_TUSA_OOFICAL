@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#17231e">
+  <title>Panel de administración | Cerro Tusa Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body class="admin-body">
+  <section id="login-view" class="login-screen">
+    <div class="login-photo" aria-hidden="true"></div>
+    <form id="login-form" class="login-card">
+      <a class="login-brand" href="/"><span class="brand-symbol">CT</span><span>CERRO TUSA <b>EXPERIENCE</b></span></a>
+      <span class="admin-kicker">ESPACIO PRIVADO · VENECIA, ANTIOQUIA</span>
+      <h1>Qué bueno<br>tenerte <em>de vuelta.</em></h1>
+      <p class="login-copy">Ingresa para gestionar reservas, mensajes y experiencias.</p>
+      <label>Correo electrónico<input name="email" type="email" autocomplete="username" placeholder="tu@correo.com" required maxlength="254"></label>
+      <label>Contraseña<input name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required maxlength="128"></label>
+      <button class="admin-primary login-submit" type="submit">Entrar al panel <span aria-hidden="true">→</span></button>
+      <p class="admin-message" role="status" aria-live="polite"></p>
+      <a class="back-link" href="/">← Volver al sitio público</a>
+    </form>
+  </section>
+
+  <div id="dashboard-view" class="admin-layout" hidden>
+    <aside class="admin-sidebar">
+      <a class="sidebar-brand" href="/"><span class="brand-symbol">CT</span><span>CERRO TUSA<small>EXPERIENCE</small></span></a>
+      <div class="workspace-label">TU ESPACIO</div>
+      <nav class="sidebar-nav" aria-label="Secciones administrativas">
+        <button class="sidebar-link is-active" type="button" data-section="overview"><span class="nav-icon">◈</span>Resumen</button>
+        <button class="sidebar-link" type="button" data-section="reservations"><span class="nav-icon">▤</span>Reservas<span class="nav-badge" id="pending-badge">0</span></button>
+        <button class="sidebar-link" type="button" data-section="contacts"><span class="nav-icon">✉</span>Mensajes<span class="nav-badge nav-badge-pink" id="contact-badge">0</span></button>
+        <button class="sidebar-link" type="button" data-section="experiences"><span class="nav-icon">✳</span>Experiencias</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-help"><span class="help-spark">✦</span><strong>¿Necesitas ayuda?</strong><p>Vuelve al sitio para revisar cómo lo ven tus visitantes.</p><a href="/" target="_blank" rel="noopener noreferrer">Ver sitio público ↗</a></div>
+        <button id="logout-button" class="logout-link" type="button"><span>↪</span> Cerrar sesión</button>
+      </div>
+      <div class="sidebar-footer">PANEL DE OPERACIONES <span>v1.0</span></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div class="breadcrumbs"><span>GESTIÓN</span><span class="crumb-slash">/</span><strong id="current-section-name">Resumen</strong></div>
+        <div class="topbar-actions"><span class="live-dot"></span><span class="online-label">Panel activo</span><span class="topbar-divider"></span><span id="admin-user" class="admin-user">Administrador</span><span class="user-avatar" aria-hidden="true">CT</span></div>
+      </header>
+      <div class="admin-content">
+        <section id="admin-error" class="admin-alert" role="alert" hidden></section>
+
+        <section class="admin-section" id="section-overview">
+          <div class="page-heading">
+            <div><span class="admin-kicker"><span class="kicker-star">✦</span> TU OPERACIÓN, DE UN VISTAZO</span><h1>¡Hola! Aquí está <em>tu resumen.</em></h1><p>Reservas, visitantes y experiencias en un solo lugar.</p></div>
+            <button id="refresh-button" class="admin-secondary" type="button"><span class="refresh-icon">↻</span> Actualizar</button>
+          </div>
+          <div class="stats-grid" id="metrics"></div>
+          <div class="overview-grid">
+            <section class="dash-card overview-reservations">
+              <div class="card-title-row"><div><span class="card-eyebrow">LO MÁS RECIENTE</span><h2>Últimas solicitudes</h2></div><button class="inline-link" type="button" data-go="reservations">Ver todas <span>→</span></button></div>
+              <div class="table-scroll"><table class="admin-table"><thead><tr><th>VISITANTE</th><th>EXPERIENCIA</th><th>FECHA</th><th>ESTADO</th><th></th></tr></thead><tbody id="recent-booking-rows"></tbody></table></div>
+            </section>
+            <section class="dash-card status-card">
+              <div class="card-title-row"><div><span class="card-eyebrow">SEGUIMIENTO</span><h2>Estado de solicitudes</h2></div><span class="status-spark">✳</span></div>
+              <div id="status-breakdown" class="status-breakdown"></div>
+              <button class="status-cta" type="button" data-go="reservations">Gestionar reservas <span>↗</span></button>
+            </section>
+          </div>
+          <section class="dash-card quick-card">
+            <div class="quick-copy"><span class="card-eyebrow">SIGUIENTE PASO</span><h2>Que cada visita<br>sea <em>inolvidable.</em></h2><p>Revisa solicitudes nuevas, confirma disponibilidad y comparte información clara antes de cada recorrido.</p></div>
+            <div class="quick-links"><button type="button" data-go="reservations"><span class="quick-icon quick-icon-orange">▤</span><span><strong>Revisar reservas</strong><small>Gestiona fechas, estados y notas</small></span><b>→</b></button><button type="button" data-go="experiences"><span class="quick-icon quick-icon-lime">✳</span><span><strong>Editar experiencias</strong><small>Actualiza lo que ofreces</small></span><b>→</b></button><button type="button" data-go="contacts"><span class="quick-icon quick-icon-pink">✉</span><span><strong>Leer mensajes</strong><small>Responde a tus visitantes</small></span><b>→</b></button></div>
+          </section>
+        </section>
+
+        <section class="admin-section" id="section-reservations" hidden>
+          <div class="page-heading">
+            <div><span class="admin-kicker"><span class="kicker-star">✦</span> RESERVAS Y SOLICITUDES</span><h1>Personas listas para <em>explorar.</em></h1><p>Revisa cada solicitud y confirma disponibilidad directamente con el visitante.</p></div>
+            <button id="reservations-refresh" class="admin-secondary" type="button"><span class="refresh-icon">↻</span> Actualizar</button>
+          </div>
+          <div class="stats-grid compact-stats" id="reservation-stats"></div>
+          <section class="dash-card data-card">
+            <form id="booking-filters" class="filter-toolbar">
+              <label class="search-field"><span aria-hidden="true">⌕</span><input name="busqueda" maxlength="120" placeholder="Buscar nombre, correo o código…" aria-label="Buscar reservas"></label>
+              <label class="filter-select"><span>Estado</span><select name="estado"><option value="">Todos los estados</option><option value="pendiente">Pendiente</option><option value="confirmada">Confirmada</option><option value="rechazada">Rechazada</option><option value="cancelada">Cancelada</option></select></label>
+              <label class="filter-date"><span>Fecha</span><input type="date" name="fecha"></label>
+              <button class="admin-primary filter-submit" type="submit">Buscar</button>
+              <button id="clear-filters" class="admin-secondary clear-filter" type="button">Limpiar</button>
+              <button id="export-bookings" class="admin-secondary export-button" type="button"><span>↓</span> Exportar CSV</button>
+            </form>
+            <div class="table-scroll"><table class="admin-table booking-table"><thead><tr><th>CÓDIGO</th><th>VISITANTE</th><th>EXPERIENCIA</th><th>FECHA SOLICITADA</th><th>PERSONAS</th><th>ESTADO</th><th>ACCIONES</th></tr></thead><tbody id="booking-rows"></tbody></table></div>
+            <div class="table-footer"><span id="booking-count">0 solicitudes</span><div class="pagination"><button id="previous-page" type="button" aria-label="Página anterior" disabled>←</button><span id="page-label">Página 1</span><button id="next-page" type="button" aria-label="Página siguiente" disabled>→</button></div></div>
+            <p id="booking-message" class="admin-message" role="status" aria-live="polite"></p>
+          </section>
+        </section>
+
+        <section class="admin-section" id="section-contacts" hidden>
+          <div class="page-heading">
+            <div><span class="admin-kicker"><span class="kicker-star">✦</span> BANDEJA DE ENTRADA</span><h1>Conversaciones que <em>conectan.</em></h1><p>Lee y organiza los mensajes enviados desde el sitio.</p></div>
+            <button id="contacts-refresh" class="admin-secondary" type="button"><span class="refresh-icon">↻</span> Actualizar</button>
+          </div>
+          <section class="dash-card data-card">
+            <form id="contact-filters" class="filter-toolbar">
+              <label class="search-field"><span aria-hidden="true">⌕</span><input name="busqueda" maxlength="120" placeholder="Buscar nombre, asunto o correo…" aria-label="Buscar mensajes"></label>
+              <label class="filter-select"><span>Estado</span><select name="estado"><option value="">Todos los mensajes</option><option value="nuevo">Nuevo</option><option value="contactado">Contactado</option><option value="archivado">Archivado</option></select></label>
+              <button class="admin-primary filter-submit" type="submit">Buscar</button>
+              <button id="clear-contact-filters" class="admin-secondary clear-filter" type="button">Limpiar</button>
+            </form>
+            <div id="contact-list" class="contact-list"></div>
+            <div class="table-footer"><span id="contact-count">0 mensajes</span></div>
+            <p id="contact-message" class="admin-message" role="status" aria-live="polite"></p>
+          </section>
+        </section>
+
+        <section class="admin-section" id="section-experiences" hidden>
+          <div class="page-heading">
+            <div><span class="admin-kicker"><span class="kicker-star">✦</span> CATÁLOGO DEL SITIO</span><h1>Experiencias a tu <em>manera.</em></h1><p>Publica solo recorridos, condiciones y tarifas confirmados por el operador.</p></div>
+          </div>
+          <section class="dash-card experience-editor">
+            <div class="card-title-row"><div><span class="card-eyebrow">CATÁLOGO</span><h2>Agregar o editar experiencia</h2></div><span class="editor-decoration">✳</span></div>
+            <form id="experience-form" class="experience-form">
+              <input type="hidden" name="id">
+              <label>Nombre<input name="nombre" required maxlength="120" placeholder="Caminata de naturaleza"></label>
+              <label>Identificador URL<input name="slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" maxlength="80" placeholder="caminata-naturaleza"></label>
+              <label>Precio en COP<input name="precio" type="number" min="0" max="100000000" placeholder="Opcional"></label>
+              <label>Duración<input name="duracion" maxlength="80" placeholder="Por confirmar"></label>
+              <label>Dificultad<input name="dificultad" maxlength="80" placeholder="Por confirmar"></label>
+              <label>Imagen URL<input name="imagen" type="url" maxlength="500" placeholder="https://… (opcional)"></label>
+              <label class="field-wide">Descripción<textarea name="descripcion" required maxlength="2000" rows="3"></textarea></label>
+              <label class="field-wide">Requisitos<textarea name="requisitos" maxlength="500" rows="2"></textarea></label>
+              <label class="publish-toggle"><input name="activa" type="checkbox"><span>Publicar en el sitio</span></label>
+              <div class="form-buttons"><button class="admin-primary" type="submit">Guardar experiencia <span>→</span></button><button id="cancel-edit" class="admin-secondary" type="button">Limpiar</button></div>
+            </form>
+            <p id="experience-message" class="admin-message" role="status" aria-live="polite"></p>
+          </section>
+          <section class="experience-cards" id="experience-cards"></section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="booking-dialog" class="booking-dialog">
+    <form method="dialog"><button class="dialog-close" aria-label="Cerrar detalle">×</button></form>
+    <div id="booking-detail"></div>
+  </dialog>
+  <dialog id="contact-dialog" class="booking-dialog">
+    <form method="dialog"><button class="dialog-close" aria-label="Cerrar mensaje">×</button></form>
+    <div id="contact-detail"></div>
+  </dialog>
+  <script src="/static/admin.js" defer></script>
+</body>
+</html>

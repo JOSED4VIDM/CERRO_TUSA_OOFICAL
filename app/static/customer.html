@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#173d2a">
+  <title>Mi cuenta | Cerro Tusa Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/customer.css">
+</head>
+<body>
+  <header class="account-header">
+    <a class="brand" href="/"><span class="brand-mark">CT</span><span><strong>Cerro Tusa</strong><small>EXPERIENCE · VENECIA</small></span></a>
+    <a href="/">Volver al sitio <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="account-main">
+    <section id="auth-view" class="auth-view">
+      <div class="intro">
+        <span class="eyebrow">TU ESPACIO · CERRO TUSA EXPERIENCE</span>
+        <h1>Vuelve a tu<br><em>próxima historia.</em></h1>
+        <p>Inicia sesión para revisar el estado de tus solicitudes de recorrido. ¿Es tu primera vez? Crea tu cuenta aquí.</p>
+        <a class="admin-link" href="/admin">Acceso para administradores →</a>
+      </div>
+      <div class="auth-forms">
+        <form id="customer-login-form" class="account-card">
+          <h2>Iniciar sesión</h2>
+          <label>Correo electrónico<input name="email" type="email" autocomplete="username" required maxlength="254"></label>
+          <label>Contraseña<input name="password" type="password" autocomplete="current-password" required maxlength="128"></label>
+          <button type="submit">Entrar a mi cuenta <span aria-hidden="true">→</span></button>
+          <p class="form-message" role="status" aria-live="polite"></p>
+        </form>
+        <form id="customer-register-form" class="account-card">
+          <h2>Crear cuenta</h2>
+          <label>Nombre completo<input name="nombre" autocomplete="name" required minlength="2" maxlength="120"></label>
+          <label>Correo electrónico<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+          <label>Contraseña <small>(mínimo 12 caracteres)</small><input name="password" type="password" autocomplete="new-password" required minlength="12" maxlength="128"></label>
+          <button type="submit">Crear mi cuenta <span aria-hidden="true">→</span></button>
+          <p class="form-message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+    <section id="account-view" class="account-view" hidden>
+      <div class="account-title">
+        <div><span class="eyebrow">TU CUENTA</span><h1>Hola, <em id="customer-name"></em></h1><p>Estas son las solicitudes asociadas a tu cuenta.</p></div>
+        <button id="logout-button" class="button-secondary" type="button">Cerrar sesión</button>
+      </div>
+      <div id="reservations" class="reservations"></div>
+      <a class="new-booking" href="/#reservar">Consultar un recorrido <span aria-hidden="true">→</span></a>
+    </section>
+  </main>
+  <script src="/static/customer.js" defer></script>
+</body>
+</html>
