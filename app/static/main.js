@@ -51,7 +51,7 @@ async function loadPublicContent() {
       option.textContent = experience.nombre;
       experienceSelect.append(option);
       const details = [experience.duracion, experience.dificultad].filter(Boolean);
-      const price = experience.precio == null ? "Consultar tarifa" : new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(experience.precio);
+      const price = experience.precio == null ? "Consultar tarifa" : `${new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(experience.precio)} COP`;
       const imageLabel = experience.imagen ? "Imagen referencial" : "Ilustración conceptual";
       return `<article class="experience-card"><div class="experience-visual" role="img" aria-label="${imageLabel} de paisaje de montaña"><small>${imageLabel.toUpperCase()}</small></div><div class="experience-copy"><h3>${escapeHtml(experience.nombre)}</h3><p>${escapeHtml(experience.descripcion)}</p><div class="experience-meta">${details.map(escapeHtml).join(" · ")}</div><p class="experience-meta">${escapeHtml(price)}</p><a class="button" href="#reservar" data-experience="${escapeHtml(experience.id)}">Consultar experiencia <span aria-hidden="true">→</span></a></div></article>`;
     });

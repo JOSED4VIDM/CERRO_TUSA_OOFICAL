@@ -25,7 +25,7 @@ const longDate = (value) => {
 const initials = (name) => String(name || "CT").trim().split(/\s+/).slice(0, 2).map((part) => part[0]?.toLocaleUpperCase("es")).join("") || "CT";
 const statusLabel = { pendiente: "Pendiente", confirmada: "Confirmada", rechazada: "Rechazada", cancelada: "Cancelada" };
 const contactStatusLabel = { nuevo: "Nuevo", contactado: "Contactado", archivado: "Archivado" };
-const formatPrice = (amount) => amount == null ? "Por confirmar" : new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(amount);
+const formatPrice = (amount) => amount == null ? "Por confirmar" : `${new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(amount)} COP`;
 const loginView = document.querySelector("#login-view");
 const dashboardView = document.querySelector("#dashboard-view");
 const sectionNames = { overview: "Resumen", reservations: "Reservas", contacts: "Mensajes", experiences: "Experiencias" };
