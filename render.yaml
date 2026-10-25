@@ -15,9 +15,5 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
-      - key: WHATSAPP_NUMBER
-        sync: false
-      - key: CONTACT_EMAIL
-        sync: false
       - key: BUSINESS_NAME
         value: Cerro Tusa Experience
