@@ -52,8 +52,10 @@ async function loadPublicContent() {
       experienceSelect.append(option);
       const details = [experience.duracion, experience.dificultad].filter(Boolean);
       const price = experience.precio == null ? "Consultar tarifa" : `${new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(experience.precio)} COP`;
-      const imageLabel = experience.imagen ? "Imagen referencial" : "Ilustración conceptual";
-      return `<article class="experience-card"><div class="experience-visual" role="img" aria-label="${imageLabel} de paisaje de montaña"><small>${imageLabel.toUpperCase()}</small></div><div class="experience-copy"><h3>${escapeHtml(experience.nombre)}</h3><p>${escapeHtml(experience.descripcion)}</p><div class="experience-meta">${details.map(escapeHtml).join(" · ")}</div><p class="experience-meta">${escapeHtml(price)}</p><a class="button" href="#reservar" data-experience="${escapeHtml(experience.id)}">Consultar experiencia <span aria-hidden="true">→</span></a></div></article>`;
+      const visual = experience.imagen
+        ? `<div class="experience-visual"><small>IMAGEN REFERENCIAL</small><img src="${escapeHtml(experience.imagen)}" alt="Fotografía referencial de ${escapeHtml(experience.nombre)}" loading="lazy" decoding="async"></div>`
+        : '<div class="experience-visual" role="img" aria-label="Ilustración conceptual de paisaje de montaña"><small>ILUSTRACIÓN CONCEPTUAL</small></div>';
+      return `<article class="experience-card">${visual}<div class="experience-copy"><h3>${escapeHtml(experience.nombre)}</h3><p>${escapeHtml(experience.descripcion)}</p><div class="experience-meta">${details.map(escapeHtml).join(" · ")}</div><p class="experience-meta">${escapeHtml(price)}</p><a class="button" href="#reservar" data-experience="${escapeHtml(experience.id)}">Consultar experiencia <span aria-hidden="true">→</span></a></div></article>`;
     });
     experienceList.innerHTML = cards.length
       ? cards.join("")

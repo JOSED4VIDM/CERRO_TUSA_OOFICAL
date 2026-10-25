@@ -131,7 +131,10 @@ def test_customer_account_page_is_served():
     assert 'id="customer-register-form"' in response.text
 
 
-def test_health_reports_missing_database():
+def test_health_reports_missing_database(monkeypatch):
+    from app import database as database_module
+
+    monkeypatch.setattr(database_module, "get_settings", lambda: SimpleNamespace(mongodb_uri=""))
     with TestClient(app) as client:
         response = client.get("/health")
     assert response.status_code == 503
