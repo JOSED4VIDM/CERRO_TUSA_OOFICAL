@@ -1,0 +1,10 @@
+{% extends "storefront/base.html" %}
+{% block title %}{{ product.name }} | TechGear{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'catalog' %}">← Volver al catálogo</a>
+<section class="detail">
+  {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<div class="placeholder">TG</div>{% endif %}
+  <div><p class="eyebrow">PRODUCTO TECHGEAR</p><h1>{{ product.name }}</h1><p>{{ product.description }}</p><p class="price">${{ product.price }}</p><p class="stock">{% if product.stock %}{{ product.stock }} disponibles{% else %}Agotado{% endif %}</p>
+  {% if product.stock %}<form method="post" action="{% url 'add-to-cart' product.id %}">{% csrf_token %}<label>Cantidad <input type="number" name="quantity" value="1" min="1" max="99"></label><button class="button" type="submit">Agregar al carrito</button></form>{% endif %}</div>
+</section>
+{% endblock %}

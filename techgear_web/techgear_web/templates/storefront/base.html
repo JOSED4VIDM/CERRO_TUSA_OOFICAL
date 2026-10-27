@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TechGear{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'storefront/style.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{% url 'catalog' %}">TECHGEAR<span>.</span></a>
+    <nav>
+      <a href="{% url 'catalog' %}">Productos</a>
+      <a href="{% url 'cart' %}">Carrito</a>
+      {% if request.session.techgear_user %}
+        <a href="{% url 'orders' %}">Mis pedidos</a>
+        {% if request.session.techgear_user.role == "admin" %}<a href="{% url 'admin-dashboard' %}">Administrar</a>{% endif %}
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="nav-button button" type="submit">Salir</button></form>
+      {% else %}
+        <a href="{% url 'account' %}">Ingresar</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% if messages %}<section class="messages">{% for message in messages %}<p class="{{ message.tags }}">{{ message }}</p>{% endfor %}</section>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>TechGear · Tecnología para tu día a día</footer>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{% extends "storefront/base.html" %}
+{% block title %}Mis pedidos | TechGear{% endblock %}
+{% block content %}
+<section class="section-heading"><div><p class="eyebrow">TU HISTORIAL</p><h1>Mis pedidos</h1></div></section>
+<section class="orders">{% for order in orders %}<article class="order"><div><strong>Pedido {{ order.id }}</strong><p>{{ order.created_at|default:"" }} · {{ order.status }}</p></div><strong>${{ order.total }}</strong><ul>{% for item in order.items %}<li>{{ item.quantity }} × {{ item.name }}</li>{% endfor %}</ul></article>{% empty %}<div class="empty"><p>Aún no tienes pedidos.</p><a href="{% url 'catalog' %}">Explora el catálogo</a></div>{% endfor %}</section>
+{% endblock %}

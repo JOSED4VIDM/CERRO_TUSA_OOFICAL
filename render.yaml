@@ -15,3 +15,49 @@ services:
         generateValue: true
       - key: BUSINESS_NAME
         value: Cerro Tusa Experience
+  - type: web
+    name: techgear-api
+    runtime: python
+    plan: free
+    region: ohio
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd techgear_api && gunicorn techgear_api.wsgi:application --bind 0.0.0.0:$PORT
+    healthCheckPath: /api/health/
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: techgear-api.onrender.com
+      - key: TECHGEAR_MONGODB_URI
+        sync: false
+      - key: TECHGEAR_MONGODB_DATABASE
+        value: techgear
+      - key: TECHGEAR_JWT_SECRET
+        generateValue: true
+      - key: TECHGEAR_ADMIN_EMAIL
+        sync: false
+      - key: TECHGEAR_ADMIN_PASSWORD
+        sync: false
+  - type: web
+    name: techgear-web
+    runtime: python
+    plan: free
+    region: ohio
+    buildCommand: pip install -r requirements.txt && cd techgear_web && python manage.py collectstatic --noinput
+    startCommand: cd techgear_web && gunicorn techgear_web.wsgi:application --bind 0.0.0.0:$PORT
+    healthCheckPath: /health/
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: techgear-web.onrender.com
+      - key: TECHGEAR_API_URL
+        value: https://techgear-api.onrender.com
+      - key: TECHGEAR_MONGODB_URI
+        sync: false
+      - key: TECHGEAR_MONGODB_DATABASE
+        value: techgear

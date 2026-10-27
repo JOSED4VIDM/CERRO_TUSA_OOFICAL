@@ -1,0 +1,11 @@
+{% extends "storefront/base.html" %}
+{% block title %}Tu cuenta | TechGear{% endblock %}
+{% block content %}
+<section class="account">
+  <div><p class="eyebrow">BIENVENIDO A TECHGEAR</p><h1>Tu cuenta, tus compras.</h1><p>Ingresa o crea una cuenta para guardar tu carrito y consultar tus pedidos.</p></div>
+  <div class="forms">
+    <form class="panel" method="post">{% csrf_token %}<input type="hidden" name="action" value="login"><h2>Ingresar</h2><label>Correo<input type="email" name="email" autocomplete="email" required></label><label>Contraseña<input type="password" name="password" autocomplete="current-password" required></label><button class="button" type="submit">Ingresar</button></form>
+    <form class="panel" method="post">{% csrf_token %}<input type="hidden" name="action" value="register"><h2>Crear cuenta</h2><label>Nombre<input name="name" autocomplete="name" minlength="2" maxlength="120" required></label><label>Correo<input type="email" name="email" autocomplete="email" required></label><label>Contraseña (mínimo 12 caracteres)<input type="password" name="password" autocomplete="new-password" minlength="12" required></label><button class="button" type="submit">Crear cuenta</button></form>
+  </div>
+</section>
+{% endblock %}

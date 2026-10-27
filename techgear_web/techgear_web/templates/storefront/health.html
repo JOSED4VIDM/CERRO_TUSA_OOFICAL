@@ -1,0 +1,3 @@
+{% extends "storefront/base.html" %}
+{% block title %}Estado TechGear{% endblock %}
+{% block content %}<section class="empty"><p class="eyebrow">ESTADO DE LA TIENDA</p><h1>{{ api_status }}</h1><a href="{% url 'catalog' %}">Ir al catálogo</a></section>{% endblock %}

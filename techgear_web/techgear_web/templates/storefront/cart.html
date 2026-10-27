@@ -1,0 +1,9 @@
+{% extends "storefront/base.html" %}
+{% block title %}Carrito | TechGear{% endblock %}
+{% block content %}
+<section class="section-heading"><div><p class="eyebrow">TU SELECCIÓN</p><h1>Carrito</h1></div></section>
+{% if cart.items %}
+  <section class="cart-list">{% for line in cart.items %}<article class="cart-line"><div><h2>{{ line.product.name }}</h2><p>Cantidad: {{ line.quantity }} · ${{ line.product.price }} c/u</p></div><strong>${{ line.subtotal }}</strong><form method="post" action="{% url 'remove-from-cart' line.product.id %}">{% csrf_token %}<button class="link-button" type="submit">Quitar</button></form></article>{% endfor %}
+  <div class="total"><span>Total</span><strong>${{ cart.total }}</strong></div><form method="post" action="{% url 'checkout' %}">{% csrf_token %}<button class="button" type="submit">Realizar pedido</button></form></section>
+{% else %}<div class="empty"><h2>Tu carrito está vacío</h2><a class="button" href="{% url 'catalog' %}">Ver productos</a></div>{% endif %}
+{% endblock %}
