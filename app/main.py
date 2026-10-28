@@ -52,16 +52,19 @@ async def home() -> FileResponse:
 
 
 @app.get("/admin", include_in_schema=False)
+@app.get("/admin/", include_in_schema=False)
 async def admin_page() -> FileResponse:
     return FileResponse(BASE_DIR / "static" / "admin.html")
 
 
 @app.get("/cuenta", include_in_schema=False)
+@app.get("/cuenta/", include_in_schema=False)
 async def customer_page() -> FileResponse:
     return FileResponse(BASE_DIR / "static" / "customer.html")
 
 
 @app.get("/health")
+@app.get("/health/", include_in_schema=False)
 async def health(request: Request) -> dict[str, str]:
     client: Any = getattr(request.app.state, "mongo_client", None)
     if client is None:
