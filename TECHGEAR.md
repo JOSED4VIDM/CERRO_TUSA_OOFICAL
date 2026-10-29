@@ -52,6 +52,8 @@ Inicia sesión con esa cuenta en `/cuenta/`; aparecerá `/gestion/` para adminis
 
 ## Despliegue en Render
 
+Actualmente solo está desplegada la API; la tienda web aún requiere desplegarse como servicio independiente.
+
 `render.yaml` declara servicios independientes `techgear-api` y `techgear-web` en la región Ohio, alineada con las salidas de Render que tienen autorización en Atlas; el build de la web también recopila y sirve el CSS con WhiteNoise. Configura `TECHGEAR_MONGODB_URI` como secreto en ambos servicios y `TECHGEAR_ADMIN_EMAIL` / `TECHGEAR_ADMIN_PASSWORD` para el administrador inicial de la API. Tras el primer despliegue, ejecuta desde la consola del servicio API:
 
 ```text
