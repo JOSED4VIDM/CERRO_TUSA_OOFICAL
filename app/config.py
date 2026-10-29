@@ -16,6 +16,13 @@ class Settings(BaseSettings):
     contact_email: str = ""
     environment: str = "development"
     business_name: str = "Cerro Tusa Experience"
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_username: str = "josedavidmarin311@gmail.com"
+    smtp_password: str = ""
+    smtp_from_email: str = "josedavidmarin311@gmail.com"
+    smtp_use_tls: bool = True
+    smtp_use_ssl: bool = False
 
     @property
     def allowed_origins(self) -> list[str]:

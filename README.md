@@ -84,6 +84,14 @@ No abras el acceso de red globalmente por comodidad. Render no garantiza IP de s
 | `WHATSAPP_NUMBER` | Número internacional, solo dígitos/código país recomendado |
 | `CONTACT_EMAIL` | Correo comercial público |
 | `BUSINESS_NAME` | Nombre mostrado en el sitio |
+| `SMTP_HOST`, `SMTP_PORT` | Servidor SMTP y puerto para notificaciones de aceptación; Gmail usa `smtp.gmail.com:587` |
+| `SMTP_USERNAME`, `SMTP_PASSWORD` | Cuenta Gmail y contraseña de aplicación; ambas deben configurarse juntas |
+| `SMTP_FROM_EMAIL` | Dirección remitente autorizada; para este Gmail se usa `josedavidmarin311@gmail.com` |
+| `SMTP_USE_TLS`, `SMTP_USE_SSL` | STARTTLS (predeterminado) o conexión SSL SMTP |
+
+Al cambiar una solicitud de reserva de pendiente a confirmada, el sistema envía al correo del cliente una confirmación con los datos de la ruta. Configura las variables SMTP antes de aceptar solicitudes; si el envío falla, la reserva queda confirmada y el panel informa que no se pudo enviar el correo.
+
+Para Gmail, activa la verificación en dos pasos y crea una contraseña de aplicación en la configuración de seguridad de la cuenta Google. Añade esa contraseña como secreto `SMTP_PASSWORD` en el servicio de Render; no uses la contraseña normal de la cuenta ni la pegues en el repositorio, `.env.example` o el chat. Tras guardar la variable en Render, vuelve a desplegar el servicio.
 
 No guardes `.env` en Git. La cookie administrativa es `HttpOnly`, `SameSite=Strict`, expira en 8 horas y usa `Secure` en producción. El límite de solicitudes para login, reservas y contacto reside en memoria del proceso; con múltiples instancias o reinicios frecuentes, añade un limitador compartido antes del despliegue. Mantén HTTPS en producción y revisa dependencias periódicamente.
 
@@ -145,7 +153,7 @@ Las pruebas automatizadas cubren validación y autorización con almacenamiento 
 2. En Render crea un Web Service desde ese repositorio o usa `render.yaml`.
 3. Render detecta Python; el build es `pip install -r requirements.txt`.
 4. El inicio está configurado como `uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
-5. Configura `MONGODB_URI`, `JWT_SECRET`, `MONGODB_DATABASE`, `WHATSAPP_NUMBER`, `CONTACT_EMAIL`, `BUSINESS_NAME`, `ENVIRONMENT=production` y, solo si aplica, `FRONTEND_URL`/`CORS_ORIGINS`.
+5. Configura `MONGODB_URI`, `JWT_SECRET`, `MONGODB_DATABASE`, `WHATSAPP_NUMBER`, `CONTACT_EMAIL`, `BUSINESS_NAME`, `ENVIRONMENT=production` y las variables SMTP de la tabla para habilitar correos de confirmación; configura, solo si aplica, `FRONTEND_URL`/`CORS_ORIGINS`.
 6. Define cuidadosamente Network Access de Atlas según las IP de salida disponibles para el plan de Render, sin permitir globalmente todas las IP.
 7. Despliega y comprueba la URL asignada en `/`, `/health` y `/docs`.
 8. Crea el administrador con un entorno conectado a la base de producción usando `python -m app.create_admin`, con acceso controlado a las variables seguras. Evita incluir la contraseña en comandos o registros.

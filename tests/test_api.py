@@ -227,9 +227,27 @@ def test_reservation_rejects_invalid_data_and_unknown_experience(database):
 
 
 def test_admin_login_and_dashboard_do_not_expose_password_hash(database, monkeypatch):
-    from app import routers, security
+    from app import mailer, routers, security
 
-    settings = SimpleNamespace(jwt_secret="a" * 48, environment="test")
+    settings = SimpleNamespace(
+        jwt_secret="a" * 48,
+        environment="test",
+        smtp_host="smtp.example.com",
+        smtp_port=587,
+        smtp_username="mailer",
+        smtp_password="secret",
+        smtp_from_email="rutas@example.com",
+        smtp_use_tls=True,
+        smtp_use_ssl=False,
+        contact_email="contacto@example.com",
+        business_name="Cerro Tusa Experience",
+    )
+    sent_messages = []
+
+    def capture_message(_settings, message):
+        sent_messages.append(message)
+
+    monkeypatch.setattr(mailer, "_send_message", capture_message)
     monkeypatch.setattr(routers, "get_settings", lambda: settings)
     monkeypatch.setattr(security, "get_settings", lambda: settings)
     database["administradores"].documents.append(
@@ -311,6 +329,10 @@ def test_admin_login_and_dashboard_do_not_expose_password_hash(database, monkeyp
     assert transition.status_code == 200
     assert transition.json()["notas_administrativas"] == "Nota privada original"
     assert transition.json()["aceptacion_privacidad"] is True
+    assert len(sent_messages) == 1
+    assert sent_messages[0]["To"] == "ana@example.com"
+    assert "Tu reserva CT-TEST1234" in sent_messages[0].get_content()
+    assert "Cerro Tusa Experience" in sent_messages[0].get_content()
     assert updated_note.status_code == 200
     assert updated_note.json()["notas_administrativas"] == "Nota actualizada"
     assert invalid_transition.status_code == 409

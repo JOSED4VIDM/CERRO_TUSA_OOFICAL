@@ -1,6 +1,8 @@
 import asyncio
+import logging
 import re
 import secrets
+import smtplib
 import time
 from datetime import date
 from typing import Any
@@ -13,6 +15,7 @@ from pymongo.errors import DuplicateKeyError, PyMongoError
 
 from app.config import get_settings
 from app.database import get_database
+from app.mailer import send_booking_confirmation
 from app.schemas import (
     AdminLogin,
     AdminOutput,
@@ -47,6 +50,7 @@ from app.security import (
 )
 
 api = APIRouter(prefix="/api")
+logger = logging.getLogger(__name__)
 ALLOWED_TRANSITIONS = {
     BookingStatus.pendiente: {BookingStatus.confirmada, BookingStatus.rechazada, BookingStatus.cancelada},
     BookingStatus.confirmada: {BookingStatus.cancelada},
@@ -384,6 +388,15 @@ async def update_booking_status(
     )
     if result is None:
         raise HTTPException(status_code=409, detail="La solicitud cambió en otra operación; vuelve a cargarla.")
+    if payload.estado == BookingStatus.confirmada:
+        try:
+            await send_booking_confirmation(get_settings(), result)
+        except (OSError, smtplib.SMTPException, ValueError) as exc:
+            logger.exception("Booking confirmation email could not be sent for %s", result["codigo_reserva"])
+            raise HTTPException(
+                status_code=502,
+                detail="La solicitud quedó confirmada, pero no se pudo enviar el correo al cliente. Revisa la configuración SMTP.",
+            ) from exc
     return mongo_id(result)
 
 
